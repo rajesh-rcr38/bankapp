@@ -25,10 +25,13 @@ private BankRepository bankRepository;
 @GetMapping("/branch/{ifsc}")
 public BankBranches findBranchDetailsByIfsc(@PathVariable String ifsc) {
 	Optional<BankBranches> branch =  bankRepository.findById(ifsc);
+	if(!branch.isPresent()) {
+		throw new BranchNotFoundException("ifsc - "+ifsc);
+	}
 	return branch.get();
 }
 
-@RequestMapping(path="/branch/{bank_name}/{city}", method = RequestMethod.GET)
+@GetMapping("/branch/{bank_name}/{city}")
 public List<BankBranches> findBranchDetailsByNameAndCity(@PathVariable String bank_name, @PathVariable String city) {
 	return bankRepository.findByBankNameAndCity(bank_name, city);
 }
